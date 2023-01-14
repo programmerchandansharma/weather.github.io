@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <script>
+        
+        $(document).ready(function() {
+
+            $("#search").click(function(){
+                
+                var a=$("#inputlocation").val();
+
+                if(a.length>0)
+                {
+                    var key="1a4cb41e02c239e15f5ceb86bc843bf4";
+
+                    $.ajax({
+                        url: "http://api.weatherstack.com/current?access_key="+key+"&query="+a ,
+                        type: "get",
+                        success: function(response) {
+                            setdata(response);
+                        },
+                        error: function() {
+                            alert("Something went wrong!");
+                        }
+                    });
+
+                }
+                else
+                {
+                    alert("Please enter location...");
+                }
+
+            }); 
+            
+            // search click end
+
+            $("#refresh").click(function(){
+                
+                var a=$("#inputlocation").val();
+
+                if(a.length>0)
+                {
+                    // var key="1a4cb41e02c239e15f5ceb86bc843bf4";
+                    var key="da316d1786deb0229eedd7b47bcf47d8";
+
+                    $.ajax({
+                        url: "http://api.weatherstack.com/current?access_key="+key+"&query="+a ,
+                        type: "get",
+                        success: function(response) {
+                            setdata(response);
+                        },
+                        error: function() {
+                            alert("Something went wrong!");
+                        }
+                    });
+
+                }
+                else
+                {
+                    alert("Please enter location...");
+                }
+
+            });
+
+
+
+        });
+
+        function setdata(response)
+        {
+
+            $("#location").html( response.location.name + ", "+response.location.region + ", " + response.location.country );
+            $("#updatedat").html(response.location.localtime);
+            $("#icon").attr("src",response.current.weather_icons[0]);
+            $("#temp").html(response.current.temperature);
+            $("#status").html(response.current.weather_descriptions[0]);
+            $("#windspeed").html(response.current.wind_speed);
+            $("#winddir").html(response.current.wind_dir);
+            $("#humidity").html(response.current.humidity);
+            $("#visibility").html(response.current.visibility);
+        
+        }
+
+    </script>
+
+</head>
+<body>
+
+    <div class="container ">
+
+        <div class="row" >
+
+            <div class="col-sm-2"> </div>
+
+            <div class="col-sm-8 mt-2">
+
+                <div class="card w-100">
+
+                    <div class="card-header bg-danger text-center"> 
+                        <h4 class="card-title text-white">Weather App</h4>
+                    </div>
+                    
+                    <div class="card-body text-center">
+                        
+                        <div class="form-group">
+                            <h5><label>Enter Location</label></h5>
+                            <input id="inputlocation" type="text" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <button id="search" type="button" class="btn btn-warning">Search</button>
+                        </div>
+
+                        <hr/>
+
+                        <h4 id="location">Lucknow, Uttar Pradesh, India</h4>
+                        <h5>Updated at: <span id="updatedat">12-01-2023 11:40 AM</span> </h5>
+
+                        <hr/>
+
+                        <img id="icon" src="weather.png" style="height: 80px;" />
+                        <h4 id="status">FOG</h4>
+
+                        <hr/>
+
+                        <h1> <span id="temp">5</span> °C</h1>
+
+                        <hr/>
+
+                        Wind: <span id="windspeed">10</span> KMPH (<span id="winddir">NE</span>)
+                        <br/>
+                        Humidity: <span id="humidity">94</span>
+                        <br/>
+                        Visibility: <span id="visibility">1</span> KM
+
+
+                    </div>
+                    
+                    <div class="card-footer text-center">
+                        <button type="button" id="refresh" class="btn btn-secondary">Refresh</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-sm-2"> </div>
+        
+        </div>
+
+    </div>
+
+    
+</body>
+</html>
